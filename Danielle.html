@@ -3,40 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dancing Dog on Rainbow</title>
+    <title>Rainbow Screen</title>
     <style>
         body {
             height: 100vh;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
-            animation: rainbow 5s ease-in-out infinite;
-            overflow: hidden;
+            animation: rainbow 5s ease-in-out infinite
         }
 
         @keyframes rainbow {
             0% { background-position: 0% 50%; }
             100% { background-position: 100% 50%; }
         }
-
-        .dog {
-            width: 100px;
-            height: 100px;
-            background-image: url('https://media.giphy.com/media/4Zo41lhzKt6iZ8xM5a/giphy.gif'); /* Dancing dog GIF */
-            background-size: cover;
-            animation: dance 1s infinite alternate;
-        }
-
-        @keyframes dance {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-20px); }
-        }
     </style>
 </head>
 <body>
-    <div class="cat"></div>
+    <div class="dog"></div>
     <p>I added a line ! --Xiaoying</p>
+    <h1>Welcome to day 3 of bootcamp</h1>
 </body>
 </html>

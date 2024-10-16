@@ -1,39 +1,99 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Lloyds Banking Group</title>
+    <title>Harry Potter</title>
     <style>
         body {
-            background-color: rgb(73, 179, 73);
-            font-family: Arial, Helvetica, sans-serif
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f9f9f9;
+            color: #333;
+            animation: fadeIn 1s;
+        }
+        header {
             text-align: center;
-            padding: 50px;
+            background: #4e3b34;
+            color: white;
+            padding: 20px;
+            animation: slideIn 1s;
         }
         h1 {
-            color: antiquewhite;
+            font-size: 3em;
         }
-        p {
-            color:black;
-            font-size: medium;
+        section {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            animation: popIn 0.5s ease;
         }
-        .introduction {
-            margin-top: 20px
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .quote {
+            font-style: italic;
+            color: #555;
+            margin: 20px 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); }
+            to { transform: translateY(0); }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
+<body>
+
+<header>
+    <h1>Harry Potter</h1>
+    <p>A Magical Journey Through the Wizarding World</p>
+</header>
+
+<section>
+    <h2>About the Series</h2>
+    <p>The Harry Potter series, written by J.K. Rowling, follows the life and adventures of a young wizard, Harry Potter, and his friends Hermione Granger and Ron Weasley. Together, they face various challenges in their quest to defeat the dark wizard Voldemort.</p>
+    <div class="quote">“It does not do to dwell on dreams and forget to live.” – Albus Dumbledore</div>
+</section>
+
+<section>
+    <h2>Key Books</h2>
+    <ul>
+        <li>Harry Potter and the Sorcerer's Stone</li>
+        <li>Harry Potter and the Chamber of Secrets</li>
+        <li>Harry Potter and the Prisoner of Azkaban</li>
+        <li>Harry Potter and the Goblet of Fire</li>
+        <li>Harry Potter and the Order of the Phoenix</li>
+        <li>Harry Potter and the Half-Blood Prince</li>
+        <li>Harry Potter and the Deathly Hallows</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Magical Creatures</h2>
+    <img src="https://upload.wikimedia.org/wikipedia/en/3/3b/Harry_Potter_and_the_Sorcerer%27s_Stone_Poster.jpg" alt="Harry Potter">
+    <p>In the Harry Potter universe, you'll encounter a variety of magical creatures, including house-elves, hippogriffs, and dragons. Each creature adds depth to the magical world.</p>
+</section>
+
+<section>
+    <h2>Fan Art</h2>
+    <img src="https://example.com/fan-art.jpg" alt="Fan Art of Harry Potter"> <!-- Replace with a valid image URL -->
+    <p>Harry Potter has inspired countless artists to create fan art. Explore the creativity of the community through their works.</p>
+</section>
+
 </body>
-
-    <h1> Welcome to Lloyds Banking Group </h1>
-
-    <div class = "introduction">
-        <p> Hello, I am Bhavna Bhalla. </p>
-        <p> Graduate Stream: Technology Engineering </p>
-        <p> Platform: Cloud </p>
-    </div>
-
-</body>    
-
 </html>
 
 
