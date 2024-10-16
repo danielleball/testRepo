@@ -56,7 +56,7 @@
         .tic-tac-toe button:hover {
             background-color: #ddd;
         }
-        /* Modal Styles */
+ 
         .modal {
             display: none; 
             position: fixed; 
@@ -108,12 +108,16 @@
 
 <div class="content">
     <div class="card">
-        <h2>Card</h2>
-        <p>info in a card.</p>
+        <h2>Hangman Game</h2>
+        <div id="hangmanWord"></div>
+        <input type="text" id="guessInput" maxlength="1" placeholder="Guess a letter">
+        <button onclick="makeGuess()">Guess</button>
+        <div id="hangmanStatus"></div>
     </div>
     <div class="card">
-        <h2>Card 2</h2>
-        <p>another card.</p>
+        <h2>Random Git Command</h2>
+        <button onclick="showRandomCommand()">Show Random Command</button>
+        <div id="gitCommand" style="margin-top: 10px;"></div>
     </div>
     <div class="card">
         <h2>Tic Tac Toe</h2>
@@ -131,6 +135,7 @@
     </div>
 </div>
 
+
 <div id="resultModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
@@ -140,6 +145,63 @@
 </div>
 
 <script>
+
+    const words = ["javascript", "hangman", "programming", "openai", "computer"];
+    let selectedWord = words[Math.floor(Math.random() * words.length)];
+    let guessedLetters = [];
+    let remainingGuesses = 6;
+
+    function updateHangmanDisplay() {
+        const hangmanWordDiv = document.getElementById("hangmanWord");
+        const hangmanStatusDiv = document.getElementById("hangmanStatus");
+        hangmanWordDiv.innerHTML = selectedWord.split('').map(letter => (guessedLetters.includes(letter) ? letter : "_")).join(' ');
+        hangmanStatusDiv.innerHTML = `Remaining Guesses: ${remainingGuesses}`;
+        
+        if (remainingGuesses <= 0) {
+            hangmanStatusDiv.innerHTML = `Game Over! The word was "${selectedWord}".`;
+        } else if (selectedWord.split('').every(letter => guessedLetters.includes(letter))) {
+            hangmanStatusDiv.innerHTML = `Congratulations! You've guessed the word "${selectedWord}".`;
+        }
+    }
+
+    function makeGuess() {
+        const guessInput = document.getElementById("guessInput");
+        const guess = guessInput.value.toLowerCase();
+        guessInput.value = '';
+
+        if (guessedLetters.includes(guess) || guess.length !== 1) {
+            return;
+        }
+
+        guessedLetters.push(guess);
+        if (!selectedWord.includes(guess)) {
+            remainingGuesses--;
+        }
+
+        updateHangmanDisplay();
+    }
+
+    updateHangmanDisplay();
+
+
+    const gitCommands = [
+        "git init - Initialize a new Git repository",
+        "git clone [url] - Clone a repository into a new directory",
+        "git add [file] - Add file contents to the index",
+        "git commit -m 'message' - Commit changes",
+        "git push - Push changes to a remote repository",
+        "git pull - Fetch and merge changes from a remote repository",
+        "git status - Show the working tree status",
+        "git branch - List branches",
+        "git checkout [branch] - Switch branches"
+    ];
+
+    function showRandomCommand() {
+        const randomCommand = gitCommands[Math.floor(Math.random() * gitCommands.length)];
+        document.getElementById("gitCommand").innerText = randomCommand;
+    }
+
+
     const board = ['', '', '', '', '', '', '', '', ''];
     const player = 'X';
     const computer = 'O';
@@ -211,6 +273,10 @@
             document.querySelectorAll('.tic-tac-toe button')[i].innerText = '';
         }
         closeModal();
+        selectedWord = words[Math.floor(Math.random() * words.length)];
+        guessedLetters = [];
+        remainingGuesses = 6;
+        updateHangmanDisplay();
     }
 </script>
 
