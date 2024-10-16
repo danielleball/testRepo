@@ -53,6 +53,43 @@
             font-size: 24px;
             cursor: pointer;
         }
+        .tic-tac-toe button:hover {
+            background-color: #ddd;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -94,17 +131,27 @@
     </div>
 </div>
 
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="resultMessage"></p>
+        <button onclick="resetBoard()">OK</button>
+    </div>
+</div>
+
 <script>
     const board = ['', '', '', '', '', '', '', '', ''];
     const player = 'X';
     const computer = 'O';
+    let playerTurn = true;
 
     function makeMove(index) {
-        if (board[index] === '') {
+        if (playerTurn && board[index] === '') {
             board[index] = player;
             document.querySelectorAll('.tic-tac-toe button')[index].innerText = player;
             if (!checkWinner(player)) {
-                computerMove();
+                playerTurn = false; 
+                setTimeout(computerMove, 500); 
             }
         }
     }
@@ -119,7 +166,10 @@
                 break;
             }
         }
-        checkWinner(computer);
+        playerTurn = true; 
+        if (!checkWinner(computer)) {
+            checkDraw();
+        }
     }
 
     function checkWinner(player) {
@@ -131,12 +181,28 @@
         for (const pattern of winPatterns) {
             const [a, b, c] = pattern;
             if (board[a] === player && board[b] === player && board[c] === player) {
-                alert(player + ' wins!');
-                resetBoard();
+                showResult(player + ' wins!');
                 return true;
             }
         }
         return false;
+    }
+
+    function checkDraw() {
+        if (board.every(cell => cell !== '')) {
+            showResult("It's a draw!");
+            return true;
+        }
+        return false;
+    }
+
+    function showResult(message) {
+        document.getElementById("resultMessage").innerText = message;
+        document.getElementById("resultModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("resultModal").style.display = "none";
     }
 
     function resetBoard() {
@@ -144,6 +210,7 @@
             board[i] = '';
             document.querySelectorAll('.tic-tac-toe button')[i].innerText = '';
         }
+        closeModal();
     }
 </script>
 
