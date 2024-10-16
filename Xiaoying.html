@@ -1,5 +1,25 @@
-<html>
-<h1>Xiaoying</h1>
-<p>Welcome to my page</p>
-<button>Haha</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xiaoying Page</title>
+    <script>
+         function addHaha() {
+            // Create a new paragraph element
+            const newParagraph = document.createElement('p');
+            // Set its text content
+            newParagraph.textContent = "Haha";
+            // Append the new paragraph to the body
+            document.body.appendChild(newParagraph);
+        }
+        
+    </script>
+</head>
+<body>
+    <h1>Xiaoying</h1>
+    <p>Unwelcome to my page</p>
+    <button onclick="addHaha()">Haha</button>
+    <button onclick="addHaha()">Clear</button>
+</body>
 </html>

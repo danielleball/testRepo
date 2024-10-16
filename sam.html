@@ -41,15 +41,64 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+        .tic-tac-toe {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 10px;
+            justify-content: center;
+        }
+        .tic-tac-toe button {
+            width: 100px;
+            height: 100px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .tic-tac-toe button:hover {
+            background-color: #ddd;
+        }
+ 
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="navbar">
     <a href="#home">Home</a>
-    <a href="./Danielle.html">Danielle.html</a>
-    <a href="./Xiaoying.html">Xiaoying.html</a>
-    <a href="#">page 3</a>
+    <a href="./Danielle.html">Danielle</a>
+    <a href="./Xiaoying.html">Xiaoying</a>
+    <a href="./Bhavna.html">Bhavna</a>
 </div>
 
 <div class="hero">
@@ -59,15 +108,177 @@
 
 <div class="content">
     <div class="card">
-        <h2>Card</h2>
-        <p>info in a card.</p>
+        <h2>Hangman Game</h2>
+        <div id="hangmanWord"></div>
+        <input type="text" id="guessInput" maxlength="1" placeholder="Guess a letter">
+        <button onclick="makeGuess()">Guess</button>
+        <div id="hangmanStatus"></div>
     </div>
     <div class="card">
-        <h2>Card 2</h2>
-        <p>another card.</p>
+        <h2>Random Git Command</h2>
+        <button onclick="showRandomCommand()">Show Random Command</button>
+        <div id="gitCommand" style="margin-top: 10px;"></div>
+    </div>
+    <div class="card">
+        <h2>Tic Tac Toe</h2>
+        <div class="tic-tac-toe" id="tic-tac-toe">
+            <button onclick="makeMove(0)"></button>
+            <button onclick="makeMove(1)"></button>
+            <button onclick="makeMove(2)"></button>
+            <button onclick="makeMove(3)"></button>
+            <button onclick="makeMove(4)"></button>
+            <button onclick="makeMove(5)"></button>
+            <button onclick="makeMove(6)"></button>
+            <button onclick="makeMove(7)"></button>
+            <button onclick="makeMove(8)"></button>
+        </div>
     </div>
 </div>
 
+
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <p id="resultMessage"></p>
+        <button onclick="resetBoard()">OK</button>
+    </div>
+</div>
+
+<script>
+
+    const words = ["javascript", "hangman", "programming", "openai", "computer"];
+    let selectedWord = words[Math.floor(Math.random() * words.length)];
+    let guessedLetters = [];
+    let remainingGuesses = 6;
+
+    function updateHangmanDisplay() {
+        const hangmanWordDiv = document.getElementById("hangmanWord");
+        const hangmanStatusDiv = document.getElementById("hangmanStatus");
+        hangmanWordDiv.innerHTML = selectedWord.split('').map(letter => (guessedLetters.includes(letter) ? letter : "_")).join(' ');
+        hangmanStatusDiv.innerHTML = `Remaining Guesses: ${remainingGuesses}`;
+        
+        if (remainingGuesses <= 0) {
+            hangmanStatusDiv.innerHTML = `Game Over! The word was "${selectedWord}".`;
+        } else if (selectedWord.split('').every(letter => guessedLetters.includes(letter))) {
+            hangmanStatusDiv.innerHTML = `Congratulations! You've guessed the word "${selectedWord}".`;
+        }
+    }
+
+    function makeGuess() {
+        const guessInput = document.getElementById("guessInput");
+        const guess = guessInput.value.toLowerCase();
+        guessInput.value = '';
+
+        if (guessedLetters.includes(guess) || guess.length !== 1) {
+            return;
+        }
+
+        guessedLetters.push(guess);
+        if (!selectedWord.includes(guess)) {
+            remainingGuesses--;
+        }
+
+        updateHangmanDisplay();
+    }
+
+    updateHangmanDisplay();
+
+
+    const gitCommands = [
+        "git init - Initialize a new Git repository",
+        "git clone [url] - Clone a repository into a new directory",
+        "git add [file] - Add file contents to the index",
+        "git commit -m 'message' - Commit changes",
+        "git push - Push changes to a remote repository",
+        "git pull - Fetch and merge changes from a remote repository",
+        "git status - Show the working tree status",
+        "git branch - List branches",
+        "git checkout [branch] - Switch branches"
+    ];
+
+    function showRandomCommand() {
+        const randomCommand = gitCommands[Math.floor(Math.random() * gitCommands.length)];
+        document.getElementById("gitCommand").innerText = randomCommand;
+    }
+
+
+    const board = ['', '', '', '', '', '', '', '', ''];
+    const player = 'X';
+    const computer = 'O';
+    let playerTurn = true;
+
+    function makeMove(index) {
+        if (playerTurn && board[index] === '') {
+            board[index] = player;
+            document.querySelectorAll('.tic-tac-toe button')[index].innerText = player;
+            if (!checkWinner(player)) {
+                playerTurn = false; 
+                setTimeout(computerMove, 500); 
+            }
+        }
+    }
+
+    function computerMove() {
+        let moveMade = false;
+        for (let i = 0; i < board.length; i++) {
+            if (board[i] === '') {
+                board[i] = computer;
+                document.querySelectorAll('.tic-tac-toe button')[i].innerText = computer;
+                moveMade = true;
+                break;
+            }
+        }
+        playerTurn = true; 
+        if (!checkWinner(computer)) {
+            checkDraw();
+        }
+    }
+
+    function checkWinner(player) {
+        const winPatterns = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+        for (const pattern of winPatterns) {
+            const [a, b, c] = pattern;
+            if (board[a] === player && board[b] === player && board[c] === player) {
+                showResult(player + ' wins!');
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkDraw() {
+        if (board.every(cell => cell !== '')) {
+            showResult("It's a draw!");
+            return true;
+        }
+        return false;
+    }
+
+    function showResult(message) {
+        document.getElementById("resultMessage").innerText = message;
+        document.getElementById("resultModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("resultModal").style.display = "none";
+    }
+
+    function resetBoard() {
+        for (let i = 0; i < board.length; i++) {
+            board[i] = '';
+            document.querySelectorAll('.tic-tac-toe button')[i].innerText = '';
+        }
+        closeModal();
+        selectedWord = words[Math.floor(Math.random() * words.length)];
+        guessedLetters = [];
+        remainingGuesses = 6;
+        updateHangmanDisplay();
+    }
+</script>
+
 </body>
 </html>
-
