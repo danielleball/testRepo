@@ -1,13 +1,125 @@
-<html>
-        <style>
-            body {font-family: Arial, Helvetica, sans-serif;
-            background-color: #4CAF50;}
-        </style>
-    <h1 style="color:black">Welcome to day 3 of bootcamp</h1>
-    <h3 style = "color:pink">With 100000 hours of Git</h3>
-    <h6 style = "color: white"> Wohoo ig
-    <br><br><br>
-    17 days left
-    </h6>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #board {
+            display: grid;
+            grid-template-columns: repeat(7, 50px);
+            grid-template-rows: repeat(6, 50px);
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: lightgray;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        .cell.red {
+            background-color: red;
+        }
+        .cell.yellow {
+            background-color: yellow;
+        }
+        #status {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Connect Four</h1>
+    <div id="board"></div>
+    <div id="status"></div>
+    <button id="reset">Reset Game</button>
+    <script>
+        const board = document.getElementById('board');
+        const statusDisplay = document.getElementById('status');
+        const resetButton = document.getElementById('reset');
+
+        let gameActive = true;
+        let currentPlayer = 'red';
+        let gameState = Array(6).fill(null).map(() => Array(7).fill(null));
+
+        const winningConditions = [
+            // Horizontal
+            ...Array(6).fill(null).map((_, row) => Array(4).fill(null).map((_, col) => [row, col], [row, col + 1], [row, col + 2], [row, col + 3])),
+            // Vertical
+            ...Array(7).fill(null).map((_, col) => Array(4).fill(null).map((_, row) => [row, col], [row + 1, col], [row + 2, col], [row + 3, col])),
+            // Diagonal /
+            ...Array(3).fill(null).map((_, row) => Array(4).fill(null).map((_, col) => [row, col], [row + 1, col + 1], [row + 2, col + 2], [row + 3, col + 3])),
+            // Diagonal \
+            ...Array(3).fill(null).map((_, row) => Array(4).fill(null).map((_, col) => [row, col + 3], [row + 1, col + 2], [row + 2, col + 1], [row + 3, col])),
+        ];
+
+        function createBoard() {
+            for (let row = 0; row < 6; row++) {
+                for (let col = 0; col < 7; col++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('cell');
+                    cell.setAttribute('data-row', row);
+                    cell.setAttribute('data-col', col);
+                    cell.addEventListener('click', handleCellClick);
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function handleCellClick(event) {
+            const col = event.target.getAttribute('data-col');
+            for (let row = 5; row >= 0; row--) {
+                if (!gameState[row][col]) {
+                    gameState[row][col] = currentPlayer;
+                    const cell = board.children[row * 7 + parseInt(col)];
+                    cell.classList.add(currentPlayer);
+                    if (checkWin(row, col)) {
+                        statusDisplay.innerText = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)} wins!`;
+                        gameActive = false;
+                    } else if (gameState.flat().every(cell => cell)) {
+                        statusDisplay.innerText = "It's a draw!";
+                        gameActive = false;
+                    } else {
+                        currentPlayer = currentPlayer === 'red' ? 'yellow' : 'red';
+                        statusDisplay.innerText = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}'s turn`;
+                    }
+                    break;
+                }
+            }
+        }
+
+        function checkWin(row, col) {
+            const player = gameState[row][col];
+            return winningConditions.some(condition => {
+                return condition.every(([r, c]) => gameState[r] && gameState[r][c] === player);
+            });
+        }
+
+        resetButton.addEventListener('click', resetGame);
+
+        function resetGame() {
+            gameActive = true;
+            currentPlayer = 'red';
+            gameState = Array(6).fill(null).map(() => Array(7).fill(null));
+            board.innerHTML = '';
+            statusDisplay.innerText = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}'s turn`;
+            createBoard();
+        }
+
+        createBoard();
+        statusDisplay.innerText = `${currentPlayer.charAt(0).toUpperCase() + currentPlayer.slice(1)}'s turn`;
+    </script>
 </body>
 </html>
